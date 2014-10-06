@@ -34,7 +34,7 @@ The module consists of a single type: TGrid2D.
 Requirements
 -------------------------------------------------------------------------------
 
-This module requires the wdw.vector2d module.
+This module requires the [wdw.vector2d](https://github.com/wiebow/vector2d.mod) module.
 
 Events
 -------------------------------------------------------------------------------
