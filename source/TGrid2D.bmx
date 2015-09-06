@@ -570,9 +570,9 @@ Type TGrid2D
 
 
 	rem
-	bbdoc: Draws the mouse position.
+	bbdoc: Draws the mouse position. White cross is drawn by default.
 	endrem
-	Method RenderMouse()
+	Method RenderMouse(drawCross:Int=true)
 		If Not mouseOnCanvas Return
 
 		SetGraphics(CanvasGraphics(canvas))
@@ -587,6 +587,8 @@ Type TGrid2D
 		DrawLine x - 3, y + 3, x + 3, y + 3
 		DrawLine x - 3, y - 3, x - 3, y + 3
 		DrawLine x + 3, y - 3, x + 3, y + 3
+		
+		If Not drawCross Return
 
 		SetColor 255,255,255
 		x = mouseCanvasPosition.GetX()
