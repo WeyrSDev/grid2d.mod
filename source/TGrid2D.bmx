@@ -15,6 +15,10 @@ Const GRID_RENDER_LINES:Int = 1
 Const GRID_RENDER_POINTS:Int = 2
 
 
+' register a custom event that apps can listen to.
+Global EVENT_GRID_REDRAW:Int = AllocUserEventId("GridDraw")
+
+
 Rem
 bbdoc:2d coordinate based grid
 endrem
@@ -83,7 +87,6 @@ Type TGrid2D
 	Field keyGridSizeUp:Int = KEY_CLOSEBRACKET
 
 
-
 	Rem
 	bbdoc: Constructor
 	endrem
@@ -121,61 +124,60 @@ Type TGrid2D
 
 	Rem
 	bbdoc: event handle for grid
-	about: an application can react to the raised gadgetpaint event
+	about: an application can react to the raised EVENT_GRID_REDRAW event
 	endrem
 	Method eventHook:Object(id:Int, data:Object, context:Object)
 		Local tmpEvent:TEvent = TEvent(data)
 		If Not tmpEvent Then Return data
-		Select tmpEvent.source
-			Case canvas
-				Select tmpEvent.id
-					Case EVENT_MOUSELEAVE
-						SetMouseOnCanvas(False)
-						ShowMouse()
+		if tmpEvent.source <> canvas Then Return data
 
-					Case EVENT_MOUSEENTER
-						SetMouseOnCanvas(True)
-						HideMouse()
+		Select tmpEvent.id
+			Case EVENT_MOUSELEAVE
+				SetMouseOnCanvas(False)
+				ShowMouse()
+				EmitEvent CreateEvent(EVENT_GRID_REDRAW, canvas)
 
-					Case EVENT_MOUSEWHEEL
-						If zoomActive Then ChangeZoom(tmpEvent.data)
+			Case EVENT_MOUSEENTER
+				SetMouseOnCanvas(True)
+				HideMouse()
+				EmitEvent CreateEvent(EVENT_GRID_REDRAW, canvas)
 
-					Case EVENT_MOUSEMOVE
-						OnMouseMove(tmpEvent.x, tmpEvent.y)
+			Case EVENT_MOUSEWHEEL
+				If zoomActive Then ChangeZoom(tmpEvent.data)
+				EmitEvent CreateEvent(EVENT_GRID_REDRAW, canvas)
 
-					Case EVENT_MOUSEDOWN
-						If tmpEvent.data = 1 Then leftMouseDown = True
-						If tmpEvent.data = 2 Then rightMouseDown = True
+			Case EVENT_MOUSEMOVE
+				OnMouseMove(tmpEvent.x, tmpEvent.y)
+				EmitEvent CreateEvent(EVENT_GRID_REDRAW, canvas)
 
-					Case EVENT_MOUSEUP
-						If tmpEvent.data = 1 Then leftMouseDown = False
-						If tmpEvent.data = 2 Then rightMouseDown = False
+			Case EVENT_MOUSEDOWN
+				If tmpEvent.data = 1 Then leftMouseDown = True
+				If tmpEvent.data = 2 Then rightMouseDown = True
 
-					Case EVENT_KEYDOWN
-						Select tmpEvent.data
-							Case keyGridSizeDown
-								SetGridSize( GetGridSize()/2 )
-							Case keyGridSizeUp
-								SetGridSize( GetGridSize()*2 )
-						End Select
+			Case EVENT_MOUSEUP
+				If tmpEvent.data = 1 Then leftMouseDown = False
+				If tmpEvent.data = 2 Then rightMouseDown = False
 
-					Default
-						'it is an event we're not interested in.
-						Return data
+			Case EVENT_KEYDOWN
+				Select tmpEvent.data
+					Case keyGridSizeDown
+						SetGridSize( GetGridSize()/2 )
+						EmitEvent CreateEvent(EVENT_GRID_REDRAW, canvas)
+
+					Case keyGridSizeUp
+						SetGridSize( GetGridSize()*2 )
+						EmitEvent CreateEvent(EVENT_GRID_REDRAW, canvas)
 				End Select
 
-
-				'emit event to notify any apps of a needed redraw.
-				EmitEvent CreateEvent(EVENT_GADGETPAINT, canvas)
-
 			Default
-				'no event for this item
+				'it is an event we're not interested in.
 				Return data
 		End Select
 
+
+		' return data to queue
 		Return data
 	End Method
-
 
 
 	rem
@@ -185,6 +187,7 @@ Type TGrid2D
 		zoomActive = bool
 	End Method
 
+
 	rem
 	bbdoc: Returns current zoom active flag.
 	endrem
@@ -192,12 +195,14 @@ Type TGrid2D
 		Return zoomActive
 	End Method
 
+
 	Rem
 	bbdoc: Changes mouseoncanvas bool flag.
 	endrem
 	Method SetMouseOnCanvas(bool:Int)
 		mouseOnCanvas=bool
 	End Method
+
 
 	Rem
 	bbdoc: Returns the mouse position on the canvas
@@ -207,6 +212,7 @@ Type TGrid2D
 		Return mouseCanvasPosition
 	End Method
 
+
 	Rem
 	bbdoc: Returns the mouse position on the grid
 	returns: TVector2D
@@ -215,6 +221,7 @@ Type TGrid2D
 		Return mouseGridPosition
 	End Method
 
+
 	Rem
 	bbdoc: Returns the previous mouse position on the grid.
 	returns: TVector2D
@@ -222,6 +229,7 @@ Type TGrid2D
 	Method GetPreviousMouseGridPosition:TVector2D()
 		Return prev_MouseGridPosition
 	End Method
+
 
 	Rem
 	bbdoc: Sets canvas to render to.
@@ -233,6 +241,7 @@ Type TGrid2D
 		ActivateGadget(canvas)
 	End Method
 
+
 	Rem
 	bbdoc: Returns the canvas for this grid.
 	returns: TGadget
@@ -241,12 +250,14 @@ Type TGrid2D
 		Return canvas
 	End Method
 
+
 	Rem
 	bbdoc: Sets the name of the grid.
 	endrem
 	Method SetLabel(newName:String)
 		label = newName
 	End Method
+
 
 	Rem
 	bbdoc: Returns the name of the grid.
@@ -255,12 +266,14 @@ Type TGrid2D
 		Return label
 	End Method
 
+
 	rem
 	bbdoc: Returns the grid size.
 	endrem
 	Method GetGridSize:Int()
 		Return gridSize
 	End Method
+
 
 	rem
 	bbdoc: Sets the grid size, in a range of 1-32
@@ -271,12 +284,14 @@ Type TGrid2D
 		gridSize = s
 	End Method
 
+
 	rem
 	bbdoc: Returns the grid zoom level.
 	endrem
 	Method GetZoomLevel:Float()
 		Return zoomLevel
 	End Method
+
 
 	Rem
 	bbdoc: Sets the grid zoom level.
@@ -285,12 +300,14 @@ Type TGrid2D
 		zoomLevel = z
 	End Method
 
+
 	Rem
 	bbdoc: Set visible flag.
 	endrem
 	Method SetVisible(bool:Int)
 		visible = bool
 	End Method
+
 
 	Rem
 	bbdoc: Returns visible flag.
@@ -299,6 +316,7 @@ Type TGrid2D
 		Return visible
 	End Method
 
+
 	rem
 	bbdoc: Sets grid snap option.
 	endrem
@@ -306,12 +324,14 @@ Type TGrid2D
 		snapToGrid = bool
 	End Method
 
+
 	rem
 	bbdoc: Returns grid snap option value.
 	endrem
 	Method GetGridSnap:Int()
 		Return snapToGrid
 	End Method
+
 
 	Rem
 	bbdoc: Changes zoom up or down.
@@ -346,13 +366,15 @@ Type TGrid2D
 		mouseGridPosition.Copy(result)
 	End Method
 
+
 	rem
 	bbdoc: Centers grid on passed grid location.
 	endrem
 	Method CenterOnGridLocation(gridLocation:TVector2D)
 		renderOffset.Set( (-gridLocation.GetX() * zoomLevel) + ClientWidth(canvas) / 2, ..
-							(-gridLocation.GetY() * zoomLevel) + ClientHeight(canvas) / 2)
+						  (-gridLocation.GetY() * zoomLevel) + ClientHeight(canvas) / 2)
 	End Method
+
 
 	Rem
 	bbdoc: Increases the grid size.
@@ -363,6 +385,7 @@ Type TGrid2D
 		If gridSize > 16 Then gridSize = 16
 	End Method
 
+
 	Rem
 	bbdoc: Decreases the grid size.
 	about: Grid is changed by its grid size.
@@ -371,6 +394,7 @@ Type TGrid2D
 		gridSize:-(gridSize / 2)
 		If gridSize < 1 Then gridSize = 1
 	End Method
+
 
 	Rem
 	bbdoc: Resets grid to default values.
@@ -382,12 +406,14 @@ Type TGrid2D
 		SetGridSize(8)
 	End Method
 
+
 	Rem
-	bbdoc: Moves grid offset by vector.
+	bbdoc: Moves grid render offset by vector.
 	endrem
 	Method Move(amount:TVector2D)
 		renderOffset.AddV(amount)
 	End Method
+
 
 	Rem
 	bbdoc: Updates the status text.
@@ -406,6 +432,7 @@ Type TGrid2D
 			". Position: " + Int(result.GetX()) + "," + Int(result.GetY()) + "."
 	End Method
 
+
 	rem
 	bbdoc: Returns status text.
 	endrem
@@ -413,10 +440,11 @@ Type TGrid2D
 		Return statusLine
 	End Method
 
+
 	Rem
 	bbdoc: Called when the mouse is moved over the canvas.
 	endrem
-	Method OnMouseMove( newX:Int, newY:Int)
+	Method OnMouseMove(newX:Int, newY:Int)
 		If mouseOnCanvas = False Then Return
 
 		'scroll when right mouse button is held
@@ -432,6 +460,16 @@ Type TGrid2D
 		Local result:TVector2D = MouseToGrid()
 		mouseGridPosition.Copy(result)
 	End Method
+
+
+	Rem
+		bbdoc:   Returns true if the grid position has changed since last update.
+		about:
+		returns: Int
+	EndRem
+	Method GridPositionChanged:Int()
+		Return Not mouseGridPosition.IsSame(prev_MouseGridPosition)
+	EndMethod
 
 
 	Rem
@@ -587,7 +625,7 @@ Type TGrid2D
 		DrawLine x - 3, y + 3, x + 3, y + 3
 		DrawLine x - 3, y - 3, x - 3, y + 3
 		DrawLine x + 3, y - 3, x + 3, y + 3
-		
+
 		If Not drawCross Return
 
 		SetColor 255,255,255

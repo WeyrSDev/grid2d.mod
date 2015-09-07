@@ -44,16 +44,15 @@ Type TMyApp
 
 	Function MyEventHandler:Object(id:Int, data:Object, context:Object)
 
-		'call the OnMyEvent() method in this TMyApp
+		' call the OnMyEvent() method in this TMyApp
 		If data Then TMyApp(context).OnMyEvent(TEvent(data))
-
-		'allow event to be processed by other handlers
+		' allow event to be processed by other handlers
 		Return data
 	End Function
 
 
 	Method OnMyEvent(event:TEvent)
-		If event.source = g.GetCanvas() And event.id = EVENT_GADGETPAINT
+		If event.source = c And event.id = EVENT_GRID_REDRAW
 			GridRender()
 		EndIf
 	End Method

@@ -50,6 +50,5 @@ Temporary Items
 *.blpo
 test/unit_test
 *.exe
-*.sublime-workspace
-*.sublime-project
-*.gradle
+*.properties
+.gradle/1.8/taskArtifacts/cache.properties.lock
