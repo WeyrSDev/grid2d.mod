@@ -539,7 +539,7 @@
 			"file": "source/TGrid2D.bmx",
 			"settings":
 			{
-				"buffer_size": 14039,
+				"buffer_size": 14050,
 				"line_ending": "Windows"
 			}
 		}
@@ -628,6 +628,7 @@
 	],
 	"file_history":
 	[
+		"/D/Development/Projects/wdw.mod/grid2d.mod/README.md",
 		"/D/Development/Projects/wdw.mod/grid2d.mod/grid2d.sublime-project",
 		"/D/Development/Projects/vlibed/source/TBaseObject.bmx",
 		"/D/Development/Projects/vlibed/source/TVectorObject.bmx",
@@ -754,8 +755,7 @@
 		"/C/Users/wiebo.de.wit/Dropbox/Development/BlitzMax/projects/heli-test/bomb.bmx",
 		"/C/Development/SublimeText/Data/Packages/User/blitzmax-snippets/unittest/type_test.sublime-snippet",
 		"/C/Development/SublimeText/Data/Packages/User/Preferences.sublime-settings",
-		"/D/Tools/sublime-text-3/Data/Packages/Default/Preferences.sublime-settings",
-		"/D/Tools/kickassembler/Examples/CharConverter_and_Scroll/2x2scroll.asm"
+		"/D/Tools/sublime-text-3/Data/Packages/Default/Preferences.sublime-settings"
 	],
 	"find":
 	{
@@ -919,7 +919,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -948,7 +948,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -973,11 +973,11 @@
 							"syntax": "Packages/BlitzMax/BlitzMax.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": -0.0,
+						"translation.x": 0.0,
 						"translation.y": 252.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -986,15 +986,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14039,
+						"buffer_size": 14050,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								374,
-								391
+								2955,
+								2955
 							]
 						],
 						"settings":
@@ -1003,10 +1003,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1638.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -1064,6 +1064,10 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"re",
+				"README.md"
+			],
 			[
 				"",
 				"test\\appearance_test.bmx"

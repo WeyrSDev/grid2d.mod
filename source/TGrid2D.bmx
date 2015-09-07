@@ -143,8 +143,10 @@ Type TGrid2D
 				EmitEvent CreateEvent(EVENT_GRID_REDRAW, canvas)
 
 			Case EVENT_MOUSEWHEEL
-				If zoomActive Then ChangeZoom(tmpEvent.data)
-				EmitEvent CreateEvent(EVENT_GRID_REDRAW, canvas)
+				If zoomActive
+					ChangeZoom(tmpEvent.data)
+					EmitEvent CreateEvent(EVENT_GRID_REDRAW, canvas)
+				endif
 
 			Case EVENT_MOUSEMOVE
 				OnMouseMove(tmpEvent.x, tmpEvent.y)
